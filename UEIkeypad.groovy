@@ -14,7 +14,7 @@
  *
  * May 10, 2019 Steve Jackson reverted panic message changes per Arn B Request (lines 202 & 592) 
  * 			      "May 09, 2019 Arn Burkhoff undo changes to panic message at 193 and setModeHelper they are OK
- 			      Added additional commenting to better distinguish chahges for UEI vs. Centralite keypad
+ *			      Added additional commenting to better distinguish chahges for UEI vs. Centralite keypad
  *
  * May 09, 2019 Steve Jackson changed battery reference voltages to accommodate the higher voltage of
  *                            of the UEI XHK1 keypad.  Changed voltages from 3.5 to 7.2 (voltage too high),
