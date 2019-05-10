@@ -1,5 +1,5 @@
 /**
- *  Centralite Keypad
+ *  Centralite Keypad (modified battery voltage limits for the UEI keypad)
  *
  *  Copyright 2015-2016 Mitch Pond, Zack Cornelius
  *
@@ -12,20 +12,24 @@
  *  on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License
  *  for the specific language governing permissions and limitations under the License.
  *
+ * May 10, 2019 Steve Jackson reverted panic message changes per Arn B Request (lines 202 & 592) 
+ * 			      "May 09, 2019 Arn Burkhoff undo changes to panic message at 193 and setModeHelper they are OK
+ 			      Added additional commenting to better distinguish chahges for UEI vs. Centralite keypad
+ *
  * May 09, 2019 Steve Jackson changed battery reference voltages to accommodate the higher voltage of
  *                            of the UEI XHK1 keypad.  Changed voltages from 3.5 to 7.2 (voltage too high),
  *                            3.5 to 5.2 (MinVolts), 3.0 to 6.8 (MaxVolts).  Changes are around line 400.
  *                            Also added UEI XHK1 fingerprint but did not test if DTH is assigned correctly
  *
- * May 08, 2019 Arn Burkhoff createEvent and sendEvent ignored by St Platform if data is specified
- *							  Thanks to bamarayne for the suggested solution
- *							  In createCodeEntryEvent changed createEvent
- *							  In panic message processing change createEvent around statement 193	
- * 							  In setModeHelper changed sendEvent for setting armMode, used to set an attribute
+ * May 08, 2019 Arn Burkhoff  createEvent and sendEvent ignored by St Platform if data is specified
+ *			      Thanks to bamarayne for the suggested solution
+ *		       	      In createCodeEntryEvent changed createEvent
+ *			      In panic message processing change createEvent around statement 193	
+ * 			      In setModeHelper changed sendEvent for setting armMode, used to set an attribute
  *	
- *  Apr 29, 2019 Arn Burkhoff Updated siren and off commands
- *  Apr 29, 2019 Arn Burkhoff added commands setExitNight setExitStay, capability Alarm.
- *							When Panic entered, internally issue siren command
+ * Apr 29, 2019 Arn Burkhoff  Updated siren and off commands
+ * Apr 29, 2019 Arn Burkhoff  added commands setExitNight setExitStay, capability Alarm.
+ *			      When Panic entered, internally issue siren command
  */
 metadata {
 	definition (name: "Centralite Keypad", namespace: "mitchpond", author: "Mitch Pond") {
@@ -59,9 +63,9 @@ metadata {
 		command "sendInvalidKeycodeResponse"
 		command "acknowledgeArmRequest"
 		
-		fingerprint endpointId: "01", profileId: "0104", deviceId: "0401", inClusters: "0000,0001,0003,0020,0402,0500,0B05", outClusters: "0019,0501", manufacturer: "CentraLite", model: "3400", deviceJoinName: "Xfinity 3400-X Keypad"
-		fingerprint endpointId: "01", profileId: "0104", deviceId: "0401", inClusters: "0000,0001,0003,0020,0402,0500,0501,0B05,FC04", outClusters: "0019,0501", manufacturer: "CentraLite", model: "3405-L", deviceJoinName: "Iris 3405-L Keypad"
- 		fingerprint endpointId: "01", profileId: "0104", deviceId: "0401", inClusters: "0000,0001,0003,0020,0402,0500,0B05", outClusters: "0003,0019,0501", manufacturer: "Universal Electronics Inc", model: "URC4450BC0-X-R", deviceJoinName: "Xfinity XHK1-UE Keypad"
+//		fingerprint endpointId: "01", profileId: "0104", deviceId: "0401", inClusters: "0000,0001,0003,0020,0402,0500,0B05", outClusters: "0019,0501", manufacturer: "CentraLite", model: "3400", deviceJoinName: "Xfinity 3400-X Keypad"
+//		fingerprint endpointId: "01", profileId: "0104", deviceId: "0401", inClusters: "0000,0001,0003,0020,0402,0500,0501,0B05,FC04", outClusters: "0019,0501", manufacturer: "CentraLite", model: "3405-L", deviceJoinName: "Iris 3405-L Keypad"
+ 		fingerprint endpointId: "01", profileId: "0104", deviceId: "0401", inClusters: "0000,0001,0003,0020,0402,0500,0B05", outClusters: "0003,0019,0501", manufacturer: "Universal Electronics Inc", model: "URC4450BC0-X-R", deviceJoinName: "Xfinity XHK1-UE Keypad"  //May 09, 2019 (SJ)
 	}
 	
 	preferences{
@@ -195,8 +199,8 @@ def parse(String description) {
                 	motionON()
 				}
                 else if (message?.command == 0x04) {
-//  May 8, 2019    	results = createEvent(name: "button", value: "pushed", data: [buttonNumber: 1], descriptionText: "$device.displayName panic button was pushed", isStateChange: true)
-                	results = createEvent(name: "button", value: "pushed", descriptionText: "$device.displayName panic button was pushed", isStateChange: true)
+		   	results = createEvent(name: "button", value: "pushed", data: [buttonNumber: 1], descriptionText: "$device.displayName panic button was pushed", isStateChange: true)
+//May 10, 2019 (SJ)     results = createEvent(name: "button", value: "pushed", descriptionText: "$device.displayName panic button was pushed", isStateChange: true)
                     panicContact()
                 }
 				else if (message?.command == 0x00) {
@@ -406,15 +410,20 @@ private getBatteryResult(rawValue) {
 
 	def volts = rawValue / 10
 	def descriptionText
-	if (volts > 7.2) {
+// May 09, 2019 (SJ) higher voltages are for UEI, lower voltage commented out are for Centralite & Iris
+//	if (volts > 3.5) {   // Centralite
+	if (volts > 7.2) {   // UEI
 		result.descriptionText = "${linkText} battery has too much power (${volts} volts)."
 	}
 	else {
-		def minVolts = 5.2
-		def maxVolts = 6.8
+//              def minVolts = 2.5 	// Centralite
+		def minVolts = 5.2 	// UEI
+//		def maxVolts = 3.0 	// Centralite
+		def maxVolts = 6.8 	// UEI
 		def pct = (volts - minVolts) / (maxVolts - minVolts)
 		result.value = Math.min(100, Math.round(pct * 100))
-		result.descriptionText = "${linkText} battery was ${result.value}%, (${volts} volts)"
+// May 09, 2019 (SJ) added (${volts} volts) to result.descriptionText so battery voltage shows in the log		
+		result.descriptionText = "${linkText} battery was ${result.value}%, (${volts} volts)" 
 	}
 
 	return result
@@ -584,9 +593,9 @@ def strobe()
 	}
 
 private setModeHelper(String armMode, delay) {
-//	May 08, 2019
-//	sendEvent([name: "armMode", value: armMode, data: [delay: delay as int], isStateChange: true])
-	sendEvent([name: "armMode", value: armMode, isStateChange: true])
+//	May 10, 2019 (SJ)
+	sendEvent([name: "armMode", value: armMode, data: [delay: delay as int], isStateChange: true])
+//	sendEvent([name: "armMode", value: armMode, isStateChange: true])
     def lastUpdate = formatLocalTime(now())
     sendEvent(name: "lastUpdate", value: lastUpdate, displayed: false)
 	sendStatusToDevice()
