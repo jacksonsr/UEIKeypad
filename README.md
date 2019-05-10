@@ -16,6 +16,6 @@ particular scenario.
 
 Arn B updated the old Centralite DTH and his smartapp SHM Delay 2.0 on May 09, 2019 to work with the new method 
 of createEvent.  I took his updated DTH and changed the references to the battery voltages and added the 
-fingerprint to work with the Xfinity UEI XHK1 keypad that is available on Ebay for around $20.  No changes other
+fingerprint to work with the Xfinity UEI XHK1 keypad that is available on Ebay for around $20.  No other changes
 than commenting were made to Arn B.'s modified Centralite keypad.  I will try too keep this DTH updated as Arn B.
 makes any changes so that it continues to work with SHM Delay 2.0.
