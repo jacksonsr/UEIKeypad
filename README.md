@@ -7,7 +7,7 @@ on or around May 09, 2019. On May 10, 2019 smartthings reverted that change so t
 "new method" both worked on the platform. The problem with this is that this DTH is designed to work with the 
 new method of createEvent and will not work with a smartapp that still uses the old method. An old DTH 
 will not work with a smartapp designed to work with the new method either.  That means that we now have smartapps
-that require a certain DTH to make them work.  It also limits that apps that will workwith any given DTH.  
+that require a certain DTH to make them work.  It also limits that apps that will work with any given DTH. 
 In my opinion, a can of worms that should not have been opened.
 
 I suppose someone much more adept at coding a DTH could make a DTH that works under both conditions but I do not
