@@ -20,6 +20,7 @@
  *                            of the UEI XHK1 keypad.  Changed voltages from 3.5 to 7.2 (voltage too high),
  *                            3.5 to 5.2 (MinVolts), 3.0 to 6.8 (MaxVolts).  Changes are around line 400.
  *                            Also added UEI XHK1 fingerprint but did not test if DTH is assigned correctly
+ *			      Thanks to @wtip on the SmartThings forum for publishing the voltages and fingerptint info
  *
  * May 08, 2019 Arn Burkhoff  createEvent and sendEvent ignored by St Platform if data is specified
  *			      Thanks to bamarayne for the suggested solution
