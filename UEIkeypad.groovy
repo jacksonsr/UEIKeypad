@@ -12,6 +12,7 @@
  *  on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License
  *  for the specific language governing permissions and limitations under the License.
  *
+ * June 22, 2019 Removed Errant character from temp reading
  * May 10, 2019 Steve Jackson reverted panic message changes per Arn B Request (lines 202 & 592) 
  * 			      "May 09, 2019 Arn Burkhoff undo changes to panic message at 193 and setModeHelper they are OK
  *			      Added additional commenting to better distinguish chahges for UEI vs. Centralite keypad
@@ -106,7 +107,7 @@ metadata {
         }
 
         valueTile("temperature", "device.temperature", width: 2, height: 2) {
-            state "temperature", label: '${currentValue}Â°',
+            state "temperature", label: '${currentValue}',
                 backgroundColors:[
                     [value: 31, color: "#153591"],
                     [value: 44, color: "#1e9cbb"],
