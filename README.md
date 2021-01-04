@@ -19,3 +19,9 @@ of createEvent.  I took his updated DTH and changed the references to the batter
 fingerprint to work with the Xfinity UEI XHK1 keypad that is available on Ebay for around $20.  No other changes
 than commenting were made to Arn B.'s modified Centralite keypad.  I will try too keep this DTH updated as Arn B.
 makes any changes so that it continues to work with SHM Delay 2.0.
+
+UPDATE 2020
+With the retirement of the classic app, and the many other platform changes that caused me unneeded grief, I have 
+since moved on to the Hubitat Elevation hub.  While it is not a perfect solution, it doesn run circles around
+Smartthings.  Because of this move, I will not be updating this DTH.  I will leave it here in case someone should
+find the code useful.
